@@ -115,7 +115,7 @@ class LTXDimensionCalculator:
             "required": {
                 "ratio":        (ratio_labels, {
                     "default": ratio_labels[0],
-                    "tooltip": "Aspect ratio. Portrait use-cases shown when orientation is set to Portrait.",
+                    "tooltip": "Common aspect ratios and their typical applications.",
                 }),
                 "orientation":  (["Landscape", "Portrait"], {
                     "default": "Landscape",
@@ -125,24 +125,16 @@ class LTXDimensionCalculator:
                     "default": _DEFAULT_OPTS[mid],
                     "tooltip": "All options are divisible by 64 (LTX-compatible). List updates when ratio or orientation changes.",
                 }),
-                "halve_output": ("BOOLEAN", {
-                    "default": False,
-                    "label_on":  "÷2 (stage 1)",
-                    "label_off": "full res",
-                    "tooltip": "Halves both output dimensions for use as the first-stage latent size in two-stage workflows. The resolution label is unchanged.",
-                }),
             }
         }
 
-    RETURN_TYPES  = ("INT", "INT", "STRING")
-    RETURN_NAMES  = ("width", "height", "label")
+    RETURN_TYPES  = ("INT", "INT", "INT", "INT", "STRING")
+    RETURN_NAMES  = ("width", "height", "width_half", "height_half", "label")
     FUNCTION      = "calculate"
 
-    def calculate(self, ratio: str, orientation: str, resolution: str, halve_output: bool):
+    def calculate(self, ratio: str, orientation: str, resolution: str):
         w, h = map(int, resolution.split("x"))
-        if halve_output:
-            w, h = w // 2, h // 2
-        return (w, h, resolution)
+        return (w, h, w // 2, h // 2, resolution)
 
 
 # ---------------------------------------------------------------------------

@@ -23,15 +23,16 @@ A ComfyUI custom node that calculates valid dimensions for [LTX-Video](https://g
 | `ratio` | Combo | Aspect ratio with common use-case label |
 | `orientation` | Combo | Landscape or Portrait |
 | `resolution` | Combo | Valid div-by-64 resolution for the selected ratio and orientation |
-| `halve_output` | Boolean | When enabled, outputs half the selected dimensions (÷2 stage 1) |
 
 ### Outputs
 
 | Output | Type | Description |
 |--------|------|-------------|
-| `width` | INT | Output width in pixels |
-| `height` | INT | Output height in pixels |
-| `label` | STRING | Resolution string as displayed (e.g. `1088x1920`), unaffected by halve toggle |
+| `width` | INT | Full width in pixels |
+| `height` | INT | Full height in pixels |
+| `width_half` | INT | Half width — for first-stage latent size in two-stage workflows |
+| `height_half` | INT | Half height — for first-stage latent size in two-stage workflows |
+| `label` | STRING | Resolution string as displayed (e.g. `1088x1920`) |
 
 ## Installation
 
