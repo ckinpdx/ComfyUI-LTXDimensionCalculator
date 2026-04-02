@@ -138,6 +138,40 @@ class LTXDimensionCalculator:
 
 
 # ---------------------------------------------------------------------------
+# LTX Frame Calculator
+# ---------------------------------------------------------------------------
+class LTXFrameCalculator:
+    CATEGORY = "LTX"
+
+    @classmethod
+    def INPUT_TYPES(cls):
+        return {
+            "required": {
+                "seconds": ("FLOAT", {
+                    "default": 5.0, "min": 0.1, "max": 300.0, "step": 0.1,
+                    "tooltip": "Desired clip duration in seconds.",
+                }),
+                "fps": ("FLOAT", {
+                    "default": 24.0, "min": 1.0, "max": 120.0, "step": 1.0,
+                    "tooltip": "Frames per second. LTX reference is 24 fps.",
+                }),
+            }
+        }
+
+    RETURN_TYPES  = ("INT", "FLOAT")
+    RETURN_NAMES  = ("frame_count", "actual_seconds")
+    FUNCTION      = "calculate"
+
+    def calculate(self, seconds: float, fps: float):
+        raw = seconds * fps
+        # Snap to nearest valid LTX frame count: (frames - 1) % 8 == 0, minimum 9
+        n = max(1, round((raw - 1) / 8))
+        frames = 8 * n + 1
+        actual = frames / fps
+        return (frames, round(actual, 4))
+
+
+# ---------------------------------------------------------------------------
 # API endpoint — called by the JS extension to populate the resolution widget
 # ---------------------------------------------------------------------------
 if _HAS_SERVER:

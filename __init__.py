@@ -1,11 +1,13 @@
-from .nodes import LTXDimensionCalculator
+from .nodes import LTXDimensionCalculator, LTXFrameCalculator
 
 NODE_CLASS_MAPPINGS = {
-    "LTXDimensionCalculator": LTXDimensionCalculator
+    "LTXDimensionCalculator": LTXDimensionCalculator,
+    "LTXFrameCalculator":     LTXFrameCalculator,
 }
 
 NODE_DISPLAY_NAME_MAPPINGS = {
-    "LTXDimensionCalculator": "LTX Dimension Calculator"
+    "LTXDimensionCalculator": "LTX Dimension Calculator",
+    "LTXFrameCalculator":     "LTX Frame Calculator",
 }
 
 WEB_DIRECTORY = "./web/js"
