@@ -1,0 +1,16 @@
+[project]
+name = "comfyui-ltx-dimension-calculator"
+version = "1.0.0"
+description = "Calculates LTX-compatible dimensions (div-by-64) from common aspect ratios, with portrait/landscape switching and optional half-resolution output for two-stage workflows."
+license = { file = "LICENSE" }
+authors = [{ name = "ckinpdx" }]
+requires-python = ">=3.9"
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/ckinpdx/ComfyUI-LTXDimensionCalculator"
+
+[tool.comfy]
+PublisherId = "ckinpdx"
+DisplayName = "LTX Dimension Calculator"
+Icon = ""
