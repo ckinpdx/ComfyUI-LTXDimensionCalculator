@@ -100,20 +100,6 @@ _SQUARE_CAP = max(
 # Default options for initial widget state (16:9 landscape)
 _DEFAULT_OPTS = _build_options(16, 9, landscape=True)
 
-# Master lists for server-side validation — must include every value the JS can set.
-# ComfyUI validates saved workflow values against INPUT_TYPES at prompt time.
-_ALL_RATIO_LABELS = (
-    [ls for _, _, ls, _ in RATIOS] +
-    [pt for _, _, _, pt in RATIOS if pt not in [ls for _, _, ls, _ in RATIOS]]
-)
-
-_all_res: set = set()
-for _rl, _rs, *_ in RATIOS:
-    _g = gcd(_rl, _rs)
-    _rln, _rsn = max(_rl // _g, _rs // _g), min(_rl // _g, _rs // _g)
-    _all_res.update(_build_options(_rln, _rsn, landscape=True))
-    _all_res.update(_build_options(_rln, _rsn, landscape=False))
-_ALL_RESOLUTIONS = sorted(_all_res, key=lambda s: int(s.split("x")[0]) * int(s.split("x")[1]))
 
 
 # ---------------------------------------------------------------------------
@@ -124,23 +110,28 @@ class LTXDimensionCalculator:
 
     @classmethod
     def INPUT_TYPES(cls):
+        ratio_labels = [ls for _, _, ls, _ in RATIOS]
         mid = len(_DEFAULT_OPTS) // 2
         return {
             "required": {
-                "ratio":        (_ALL_RATIO_LABELS, {
-                    "default": _ALL_RATIO_LABELS[0],
+                "ratio":        (ratio_labels, {
+                    "default": ratio_labels[0],
                     "tooltip": "Common aspect ratios and their typical applications.",
                 }),
                 "orientation":  (["Landscape", "Portrait"], {
                     "default": "Landscape",
                     "tooltip": "Switches between landscape and portrait resolution lists. Portrait is capped at 1088×1920.",
                 }),
-                "resolution":   (_ALL_RESOLUTIONS, {
+                "resolution":   (_DEFAULT_OPTS, {
                     "default": _DEFAULT_OPTS[mid],
                     "tooltip": "All options are divisible by 64 (LTX-compatible). List updates when ratio or orientation changes.",
                 }),
             }
         }
+
+    @classmethod
+    def VALIDATE_INPUTS(cls, ratio, orientation, resolution):
+        return True
 
     RETURN_TYPES  = ("INT", "INT", "INT", "INT", "STRING")
     RETURN_NAMES  = ("width", "height", "width_half", "height_half", "label")
